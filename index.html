@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-utf-8">
+  <title>jQueryの練習</title>
+</head>
+<body>
+  <p>jQueryの練習</p>
+  <ul id="main">
+    <li>0</li>
+    <li class="item">1</li>
+    <li class="item">2</li>
+    <li>
+      3
+      <ul id="sub">
+        <li>3-0</li>
+        <li>3-1</li>
+        <li class="item">3-2</li>
+        <li class="item">3-3</li>
+        <li>3-4</li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li class="at"><a href="yahoo" data-sitename="google">Yahoo</a></li>
+    <li><a href="https://www.google.com/">Google</a></li>
+    <li><a href="https://www.dotinstall.com/">Dotinstall</a></li>
+  </ul>
+
+  <div id="box" style="width:100px; height:100px; background-color:red;"></div>
+
+  <input type="text" id="name">
+  <select id="members" name="members">
+    <option>ito</option>
+    <option>sato</option>
+    <option>tanaka</option>
+  </select>
+
+  <p id="btn_pr"></p>
+  <button>Add!</button>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script>
+    // ↓ ドキュメントがすべて読み込まれたら処理をしろ
+    // $(document).ready(function(){
+    $(function() {
+
+      // セレクタ.メソッド
+      // > 直下の子要素。　これだと、liの1,2だけ赤くなる
+      // $("#main > .item").css('color', 'red');
+      //   (空白)　それ以下の要素(全部)。これだと、liの3-0、3-1も赤くなる
+      // $("#main .item").css('color', 'red');
+      // , 複数の要素
+      // $("p, .item").css('color', 'red');
+      // + 隣接する要素
+      // $(".item + .item").css('color', 'red');
+
+      // フィルター :eq()  :gt(), :odd :contains()
+      // $("#sub > li:eq(2)").css('color', 'red');
+
+      // メソッドを使ったDOM要素の指定
+      // parent(), children()
+      // next(), prev()
+      // siblings() 兄弟要素
+      // $("#sub").parent().css('color', 'red');
+      // $("#sub > li:eq(1)").next().css('color', 'red');
+
+      // 属性セレクタ
+      $('a[href="https://www.google.com/"]').css('background-color', 'red');
+
+      // attr (HTML属性を操作)
+      $('.at > a').attr('href', 'https://www.yahoo.co.jp/');
+      // data(カスタム属性を操作)
+      console.log($('.at > a').data('sitename'));
+
+      // 要素の追加
+      // before, after -> insertBefore, insertAfter
+      // prepend, append -> prependTo, appendTo
+      var li = $('<li>').text('just added');
+      $('#sub > li:eq(1)').before(li);
+      $('#sub').append(li);
+
+      // エフェクト
+      // hide, show
+      // fadeOut, fadeIn
+      // toggle (表示なら→非表示、非表示→表示)
+      $('#box').toggle('slow');
+      $('#box').toggle('slow');
+
+      // イベント
+      // click
+      // mouseover, mouseout, mousemove
+      $('#box').click(function() {
+        alert('Hi!');
+      });
+      $('#box')
+        .mouseover(function() {
+          $(this).css('background-color', 'green');
+        })
+        .mouseout(function() {
+          $(this).css('background-color', 'red');
+        })
+        // jQuery API　event object
+        .mousemove(function(e) {
+          $(this).text(e.pageX);
+        });
+
+      // focus, blur, change
+      $('#name')
+        .focus(function() {
+          $(this).css('background', 'red');
+        })
+        .blur(function() {
+          $(this).css('background', 'white');
+        });
+      $('#members').change(function() {
+        alert('changed!');
+      });
+
+      // on
+      $('button').click(function() {
+        var p = $('<p>').text('ボタン').addClass('btn');
+        $(this).before(p);
+      });
+      // 以下では、「ボタン」の文字を消せない → $(function() {})はページの読み込みが終了したら処理されるため、ページ読み込みの時点で存在しない要素に対してイベントをつけるには、onを使う必要がある
+      /* $('.btn').click(function() {
+        $(this).remove();
+      }); */
+      // なので以下のように on を使用して処理する
+      $('body').on('click', '.btn', function() {
+        $(this).remove();
+      });
+
+
+    });
+  </script>
+</body>
+</html>
